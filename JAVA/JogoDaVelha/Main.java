@@ -7,6 +7,7 @@ public class Main extends JFrame {
     JButton[] bt = new JButton[9];
     JButton novo = new JButton("NOVO JOGO");
     JButton zerar = new JButton("ZERAR PLACAR");
+    JButton ativarIA = new JButton("ATIVAR IA");
 
     JLabel placar = new JLabel("PLACAR");
     JLabel px = new JLabel("X: 0");
@@ -28,8 +29,10 @@ public class Main extends JFrame {
 
         add(novo);
         add(zerar);
+        add(ativarIA);
         novo.setBounds(410, 130, 140, 30);
         zerar.setBounds(410, 180, 140, 30);
+        ativarIA.setBounds(410, 230, 140, 30);
 
         int cont = 0;
         for (int i = 0; i < 3; i++) {
@@ -42,7 +45,7 @@ public class Main extends JFrame {
         }
 
         // Inicializa a classe BotoesAcao
-        new BotoesAcao(bt, novo, zerar, px, po);
+        new Botoes(bt, novo, zerar, ativarIA, px, po);
     }
 
     public static void main(String[] args) {
