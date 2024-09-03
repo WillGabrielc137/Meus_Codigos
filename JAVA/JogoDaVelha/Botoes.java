@@ -164,16 +164,23 @@ public class Botoes {
     }
 
     private void jogarIA() {
+        // 1. Prioridade para o centro
+        if (bt[4].getText().isEmpty()) {
+            bt[4].setText("O");
+            click[4] = true;
+            verificarVitoria();
+            return;
+        }
+    
+        // 2. Verificar se há uma jogada vencedora ou para bloquear
         List<int[]> vitoria = new ArrayList<>();
         List<int[]> risco = new ArrayList<>();
-        List<int[]> tentativaVitoria = new ArrayList<>();
-        List<int[]> inicializacao = new ArrayList<>();
-
+    
         for (int[] combinacao : WINS_POSSIBLE) {
             int contadorX = 0;
             int contadorO = 0;
             int posicaoLivre = -1;
-
+    
             for (int id : combinacao) {
                 if (bt[id].getText().equals("X")) {
                     contadorX++;
@@ -183,26 +190,63 @@ public class Botoes {
                     posicaoLivre = id;
                 }
             }
-
+    
             if (contadorO == 2 && posicaoLivre != -1) {
-                risco.add(combinacao);
-            } else if (contadorO == 1 && contadorX == 0) {
-                tentativaVitoria.add(combinacao);
-            } else if (contadorX == 1 && contadorO == 0) {
-                inicializacao.add(combinacao);
-            } else if (contadorO == 0 && contadorX == 0) {
+                // Jogada para vencer
+                bt[posicaoLivre].setText("O");
+                click[posicaoLivre] = true;
+                verificarVitoria();
+                return;
+            } else if (contadorX == 2 && posicaoLivre != -1) {
+                // Bloquear vitória do jogador
+                bt[posicaoLivre].setText("O");
+                click[posicaoLivre] = true;
+                verificarVitoria();
+                return;
+            } else if (contadorO == 1 && contadorX == 0 && posicaoLivre != -1) {
                 vitoria.add(combinacao);
+            } else if (contadorX == 1 && contadorO == 0 && posicaoLivre != -1) {
+                risco.add(combinacao);
             }
         }
-
+    
+        // 3. Tentar ganhar ou ocupar uma posição estratégica
         if (!vitoria.isEmpty()) {
             fazerJogada(vitoria);
-        } else if (!risco.isEmpty()) {
+            return;
+        }
+    
+        // 4. Bloquear ameaças futuras
+        if (!risco.isEmpty()) {
             fazerJogada(risco);
-        } else if (!tentativaVitoria.isEmpty()) {
-            fazerJogada(tentativaVitoria);
-        } else if (!inicializacao.isEmpty()) {
-            fazerJogada(inicializacao);
+            return;
+        }
+    
+        // 5. Se não houver ameaça, priorizar os cantos
+        List<Integer> cantos = new ArrayList<>(List.of(0, 2, 6, 8));
+        for (int canto : cantos) {
+            if (bt[canto].getText().isEmpty()) {
+                bt[canto].setText("O");
+                click[canto] = true;
+                verificarVitoria();
+                return;
+            }
+        }
+    
+        // 6. Caso os cantos e o centro estejam ocupados, fazer uma jogada aleatória
+        List<Integer> posicoesLivres = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            if (bt[i].getText().isEmpty()) {
+                posicoesLivres.add(i);
+            }
+        }
+        
+        if (!posicoesLivres.isEmpty()) {
+            Random random = new Random();
+            int idAleatorio = posicoesLivres.get(random.nextInt(posicoesLivres.size()));
+            bt[idAleatorio].setText("O");
+            click[idAleatorio] = true;
+            verificarVitoria();
         }
     }
 
