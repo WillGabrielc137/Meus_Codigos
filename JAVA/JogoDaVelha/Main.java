@@ -1,4 +1,4 @@
-package JAVA.JogoDaVelha;
+package JogoDaVelha;
 
 import javax.swing.*;
 
@@ -44,7 +44,6 @@ public class Main extends JFrame {
             }
         }
 
-        // Inicializa a classe BotoesAcao
         new Botoes(bt, novo, zerar, ativarIA, px, po);
     }
 
